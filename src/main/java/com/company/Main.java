@@ -1,8 +1,11 @@
 package com.company;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Main {
@@ -50,20 +53,21 @@ public class Main {
                 .filter(e -> e.equals("a1"))
                 .count();
 
+        System.out.println("Количество вхождений объекта «a1» : " + count);
 
         String firstString = String.valueOf(list.stream().findFirst());
 
+        System.out.println("Первый элемент коллекции или 0, если коллекция пуста : " + firstString);
 
         Optional<String> thirdElement = list.stream()
                 .filter(x -> list.indexOf(x) == 2).findAny();
+
+        System.out.println("Третий элемент коллекции по порядку : " + thirdElement);
 
         List<String> twoElements = list.stream()
                 .filter(x -> list.subList(1, 3)
                         .contains(x)).collect(Collectors.toList());
 
-        System.out.println("Количество вхождений объекта «a1» : " + count);
-        System.out.println("Первый элемент коллекции или 0, если коллекция пуста : " + firstString);
-        System.out.println("Третий элемент коллекции по порядку : " + thirdElement);
         System.out.println("Два элемента начиная со второго : " + twoElements);
 
 
@@ -92,8 +96,37 @@ public class Main {
 
         System.out.println("\nCредний возраст среди мужчин:");
         System.out.println(Arrays.stream(averageMenAge).average());
+
+
+        System.out.println("---------------------------");
+
+        List<String> numbersList = Arrays.asList("1,2,0", "4,5");
+
+
+        System.out.println("Все числа, перечисленные через запятую из всех элементов: ");
+
+        numbersList.stream()
+                .map(x -> x.split(","))
+                .flatMap(Arrays::stream)
+                .forEachOrdered(System.out::println);
+
+
+        System.out.println("---------------------------");
+
+        List<String> lettersList = Arrays.asList("a1", "b2", "c3", "a1");
+
+
+        System.out.println("Группировка по первому символу строки : ");
+
+        Map<Character,List<String>> grouped = lettersList.stream().
+                filter(s -> s.length() > 0).
+                map(String::toLowerCase)
+                .collect(Collectors.groupingBy(x -> x.charAt(0)));
+
+        System.out.println(grouped);
+
     }
-    
+
 }
 
 
