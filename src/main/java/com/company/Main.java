@@ -55,14 +55,15 @@ public class Main {
 
         System.out.println("Количество вхождений объекта «a1» : " + count);
 
-        String firstString = String.valueOf(list.stream().findFirst());
+        String firstString = list.stream().findFirst().get();
 
         System.out.println("Первый элемент коллекции или 0, если коллекция пуста : " + firstString);
 
-        Optional<String> thirdElement = list.stream()
-                .filter(x -> list.indexOf(x) == 2).findAny();
+        System.out.print("Третий элемент коллекции по порядку : ");
 
-        System.out.println("Третий элемент коллекции по порядку : " + thirdElement);
+        list.stream()
+                .filter(x -> list.indexOf(x) == 2).forEach(x -> System.out.println(x));
+
 
         List<String> twoElements = list.stream()
                 .filter(x -> list.subList(1, 3)
@@ -95,7 +96,7 @@ public class Main {
                 .toArray();
 
         System.out.println("\nCредний возраст среди мужчин:");
-        System.out.println(Arrays.stream(averageMenAge).average());
+        System.out.println(Arrays.stream(averageMenAge).average().getAsDouble());
 
 
         System.out.println("---------------------------");
@@ -118,7 +119,7 @@ public class Main {
 
         System.out.println("Группировка по первому символу строки : ");
 
-        Map<Character,List<String>> grouped = lettersList.stream().
+        Map<Character, List<String>> grouped = lettersList.stream().
                 filter(s -> s.length() > 0).
                 map(String::toLowerCase)
                 .collect(Collectors.groupingBy(x -> x.charAt(0)));
