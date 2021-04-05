@@ -46,6 +46,16 @@ public class Main {
         }
     }
 
+
+    public static String checkFirst(List list) {
+        if (list.isEmpty()) {
+            return "0";
+        } else {
+            return (String) list.stream().findFirst().get();
+        }
+
+    }
+
     public static void main(String[] args) throws IOException {
         List<String> list = List.of("a1", "a2", "a3", "a1");
 
@@ -55,9 +65,7 @@ public class Main {
 
         System.out.println("Количество вхождений объекта «a1» : " + count);
 
-        String firstString = list.stream().findFirst().get();
-
-        System.out.println("Первый элемент коллекции или 0, если коллекция пуста : " + firstString);
+        System.out.println("Первый элемент коллекции или 0, если коллекция пуста : " + checkFirst(list));
 
         System.out.print("Третий элемент коллекции по порядку : ");
 
