@@ -1,11 +1,9 @@
 package com.company;
 
-import jdk.swing.interop.SwingInterOpUtils;
-
-import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class Main {
@@ -47,35 +45,34 @@ public class Main {
     }
 
 
-    public static String checkFirst(List list) {
-        if (list.isEmpty()) {
-            return "0";
-        } else {
-            return (String) list.stream().findFirst().get();
-        }
-
+    public static String checkFirst(List<String> list) {
+        return list.stream()
+                .findFirst()
+                .orElse("0");
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         List<String> list = List.of("a1", "a2", "a3", "a1");
 
-        int count = (int) list.stream()
-                .filter(e -> e.equals("a1"))
+        long count = list.stream()
+                .filter("a1"::equals)
                 .count();
 
-        System.out.println("Количество вхождений объекта «a1» : " + count);
+        System.out.println("Количество вхождений объекта «a1»: " + count);
 
-        System.out.println("Первый элемент коллекции или 0, если коллекция пуста : " + checkFirst(list));
+        System.out.println("Первый элемент коллекции или 0, если коллекция пуста: " + checkFirst(list));
 
-        System.out.print("Третий элемент коллекции по порядку : ");
+        String thirdElement = list.stream()
+                .skip(2)
+                .findFirst()
+                .get();
+        System.out.print("Третий элемент коллекции по порядку: " + thirdElement);
 
-        list.stream()
-                .filter(x -> list.indexOf(x) == 2).forEach(x -> System.out.println(x));
 
-
-        List<String> twoElements = list.stream()
-                .filter(x -> list.subList(1, 3)
-                        .contains(x)).collect(Collectors.toList());
+        String[] twoElements = list.stream()
+                .skip(1)
+                .limit(2)
+                .toArray(String[]::new);
 
         System.out.println("Два элемента начиная со второго : " + twoElements);
 
@@ -89,7 +86,9 @@ public class Main {
 
 
         List<People> armyMen = peoples.stream()
-                .filter(x -> (x.getAge() >= 18) && (x.getAge() <= 27))
+                .filter(p -> p.getSex() == Sex.MAN)
+                .filter(x -> x.getAge() >= 18)
+                .filter(x -> x.getAge() <= 27)
                 .collect(Collectors.toList());
 
         System.out.println("Военнообязанные мужчины: ");
@@ -97,14 +96,14 @@ public class Main {
             System.out.println(men);
         }
 
-        int[] averageMenAge = peoples.stream()
+        double averageMenAge = peoples.stream()
                 .filter(x -> x.getSex() == Sex.MAN)
                 .map(People::getAge)
                 .mapToInt(x -> x)
-                .toArray();
+                .average()
+                .orElse(0.0);
 
-        System.out.println("\nCредний возраст среди мужчин:");
-        System.out.println(Arrays.stream(averageMenAge).average().getAsDouble());
+        System.out.println("\nСредний возраст среди мужчин: " + averageMenAge);
 
 
         System.out.println("---------------------------");
@@ -127,17 +126,11 @@ public class Main {
 
         System.out.println("Группировка по первому символу строки : ");
 
-        Map<Character, List<String>> grouped = lettersList.stream().
-                filter(s -> s.length() > 0).
-                map(String::toLowerCase)
+        Map<Character, List<String>> grouped = lettersList.stream()
                 .collect(Collectors.groupingBy(x -> x.charAt(0)));
 
         System.out.println(grouped);
 
     }
-
 }
-
-
-
 
